@@ -23,4 +23,34 @@ describe("Rentals Service Unit Tests", () => {
     })]));
 
   })
+
+  it("getRentalById sucess", async ()=>{
+
+    const rental = createRental()
+
+    jest.spyOn(rentalsRepository, "getRentalById").mockImplementationOnce((): any => {
+      return rental
+    })
+
+    const result = await rentalsService.getRentalById(rental.id)
+
+    expect(result).toEqual({
+      ...rental
+    })
+  })
+
+  it("getRentalById failure", async ()=>{
+
+    jest.spyOn(rentalsRepository, "getRentalById").mockImplementationOnce((): any => {
+      return undefined
+    })
+
+    const result = rentalsService.getRentalById(10)
+
+    expect(result).rejects.toEqual({
+      message: "Rental not found." ,
+      name: "NotFoundError"
+    })
+  })
+
 })
