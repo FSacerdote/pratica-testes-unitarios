@@ -53,12 +53,12 @@ async function getUserForRental(userId: number) {
   return user;
 }
 
-async function checkUserAbleToRental(userId: number) {
+export async function checkUserAbleToRental(userId: number) {
   const rentals = await rentalsRepository.getRentalsByUserId(userId, false);
   if (rentals.length > 0) throw pendentRentalError("The user already have a rental!");
 }
 
-async function checkMoviesValidForRental(moviesId: number[], user: User) {
+export async function checkMoviesValidForRental(moviesId: number[], user: User) {
   for (let i = 0; i < moviesId.length; i++) {
     const movieId = moviesId[i];
     const movie = await moviesRepository.getById(movieId);
@@ -74,7 +74,7 @@ async function checkMoviesValidForRental(moviesId: number[], user: User) {
   }
 }
 
-function userIsUnderAge(user: User) {
+export function userIsUnderAge(user: User) {
   const age = new Date().getFullYear() - new Date(user.birthDate).getFullYear();
   return age < RENTAL_LIMITATIONS.ADULTS_REQUIRED_AGE;
 }
